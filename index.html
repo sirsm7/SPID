@@ -15,160 +15,86 @@
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .toast { transform: translateX(100%); transition: transform 0.3s ease-out; }
         .toast.show { transform: translateX(0); }
-        .fade-in { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="text-slate-800">
 
-    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+    <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-2 pointer-events-none"></div>
 
     <div class="max-w-6xl mx-auto p-6">
         
-        <header class="bg-white rounded-2xl shadow-sm p-6 mb-6 flex flex-col md:flex-row justify-between items-center border border-slate-100">
-            <div class="flex items-center gap-4">
-                <div class="bg-blue-600 text-white p-3 rounded-xl shadow-md">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                </div>
-                <div>
-                    <h1 class="text-2xl font-bold text-slate-900">Sistem Temujanji ICT</h1>
-                    <p class="text-slate-500 text-sm font-medium">Unit ICT, PPD Alor Gajah</p>
-                </div>
-            </div>
-            <div class="mt-4 md:mt-0">
-                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-green-50 text-green-700 border border-green-200 shadow-sm">
-                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> SYSTEM ONLINE
-                </span>
-            </div>
+        <header class="bg-white rounded-2xl shadow-sm p-6 mb-6 flex justify-between items-center border border-slate-100">
+            <h1 class="text-2xl font-bold text-slate-900">Sistem Temujanji ICT</h1>
+            <span class="bg-green-100 text-green-800 text-xs font-bold px-3 py-1.5 rounded-full border border-green-200">ONLINE</span>
         </header>
 
-        <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 p-8 mb-8 border border-slate-100 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+        <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-slate-100 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 to-purple-500"></div>
             <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Carian Sekolah</label>
             <div class="flex gap-3">
-                <div class="relative flex-1">
-                    <input type="text" id="searchInput" class="w-full pl-4 pr-4 py-4 border border-slate-200 bg-slate-50 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition font-bold text-slate-700 uppercase placeholder:normal-case" placeholder="Masukkan Kod Sekolah (Contoh: MBA0001)">
-                </div>
-                <button onclick="searchSchool()" class="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-slate-800 transition shadow-lg active:scale-95 transform flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    CARI
-                </button>
+                <input type="text" id="searchInput" class="flex-1 border border-slate-200 bg-slate-50 p-4 rounded-xl uppercase font-semibold focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Masukkan Kod Sekolah (Contoh: MBA0001)">
+                <button onclick="searchSchool()" class="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-slate-800 transition shadow-lg">CARI</button>
             </div>
         </div>
 
-        <div id="loadingSpinner" class="hidden py-12 text-center">
-            <div class="inline-block loader ease-linear rounded-full border-4 border-t-4 border-slate-200 h-12 w-12 mb-4"></div>
-            <p class="text-slate-400 text-sm font-medium animate-pulse">Sedang mencari data...</p>
+        <div id="loadingSpinner" class="hidden py-10 text-center">
+            <div class="loader ease-linear rounded-full border-4 border-t-4 border-slate-200 h-10 w-10 mx-auto mb-4"></div>
+            <p class="text-slate-400 text-sm animate-pulse">Sedang mencari data...</p>
         </div>
 
-        <div id="resultSection" class="hidden space-y-8 fade-in">
+        <div id="resultSection" class="hidden space-y-8">
             
-            <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-8 text-white shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h2 class="text-3xl font-bold tracking-tight" id="schoolName">Nama Sekolah</h2>
-                    <div class="flex items-center gap-2 mt-2">
-                        <span class="bg-white/20 px-2 py-1 rounded text-sm font-mono" id="schoolCode">MBA0000</span>
-                        <span class="bg-green-400/20 text-green-100 px-2 py-1 rounded text-xs font-bold border border-green-400/30">AKTIF</span>
-                    </div>
-                </div>
+            <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-lg">
+                <h2 class="text-2xl font-bold" id="schoolName">-</h2>
+                <p class="text-blue-200 font-mono text-sm mt-1" id="schoolCode">-</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg transition duration-300 relative group">
-                    <div class="absolute top-4 right-4">
-                        <span class="text-[10px] font-extrabold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md uppercase border border-blue-100">GPICT</span>
-                    </div>
-                    <div class="flex items-center gap-4 mb-6">
-                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-slate-900 text-lg leading-tight">Penyelaras ICT</h3>
-                            <p class="text-xs text-slate-500">Guru Penyelaras Bestari</p>
-                        </div>
-                    </div>
-                    <div class="space-y-1 mb-6">
-                        <p id="gpictName" class="text-lg font-semibold text-slate-800">Tiada Data</p>
-                        <p id="gpictPhone" class="text-sm text-slate-500 font-mono flex items-center gap-2">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                            <span>-</span>
-                        </p>
-                    </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative"><span class="absolute top-4 right-4 text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-1 rounded">GPICT</span>
+                    <h3 class="font-bold text-lg mb-1">Penyelaras ICT</h3>
+                    <p id="gpictName" class="text-lg font-medium mb-1">Tiada Data</p>
+                    <p class="text-sm text-slate-500 font-mono mb-4 flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg><span id="gpictPhone">-</span></p>
                     <div id="gpictActionArea"></div>
                 </div>
-
-                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg transition duration-300 relative group">
-                    <div class="absolute top-4 right-4">
-                        <span class="text-[10px] font-extrabold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-md uppercase border border-purple-100">DELIMa</span>
-                    </div>
-                    <div class="flex items-center gap-4 mb-6">
-                        <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-xl">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-slate-900 text-lg leading-tight">Admin DELIMa</h3>
-                            <p class="text-xs text-slate-500">Pengurusan ID</p>
-                        </div>
-                    </div>
-                    <div class="space-y-1 mb-6">
-                        <p id="delimaName" class="text-lg font-semibold text-slate-800">Tiada Data</p>
-                        <p id="delimaPhone" class="text-sm text-slate-500 font-mono flex items-center gap-2">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                            <span>-</span>
-                        </p>
-                    </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative"><span class="absolute top-4 right-4 text-[10px] font-bold bg-purple-50 text-purple-600 px-2 py-1 rounded">DELIMa</span>
+                    <h3 class="font-bold text-lg mb-1">Admin DELIMa</h3>
+                    <p id="delimaName" class="text-lg font-medium mb-1">Tiada Data</p>
+                    <p class="text-sm text-slate-500 font-mono mb-4 flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg><span id="delimaPhone">-</span></p>
                     <div id="delimaActionArea"></div>
                 </div>
             </div>
 
-            <div class="bg-slate-50 rounded-xl border border-slate-200 p-6 flex flex-col md:flex-row gap-6 text-sm shadow-inner">
-                <div class="flex-1">
-                    <span class="block font-bold text-[10px] uppercase text-slate-400 tracking-widest mb-1">Pengetua / Guru Besar</span>
-                    <span id="pgbName" class="font-bold text-slate-700 uppercase block text-base">-</span>
-                </div>
-                <div class="hidden md:block w-px bg-slate-200"></div>
-                <div class="flex-1">
-                    <span class="block font-bold text-[10px] uppercase text-slate-400 tracking-widest mb-1">GPK Pentadbiran</span>
-                    <span id="gpk1Name" class="font-bold text-slate-700 uppercase block text-base">-</span>
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col md:flex-row gap-4 text-sm">
+                <div class="flex-1"><span class="block font-bold text-xs uppercase text-slate-500">Pengetua / GB</span><span id="pgbName" class="font-semibold block mt-1 uppercase">-</span></div>
+                <div class="flex-1"><span class="block font-bold text-xs uppercase text-slate-500">GPK 1</span><span id="gpk1Name" class="font-semibold block mt-1 uppercase">-</span></div>
+            </div>
+
+            <div id="appointmentHistory" class="bg-white rounded-2xl shadow-lg border border-slate-200 p-6">
+                <h3 class="text-xl font-bold mb-4 flex items-center gap-2 text-slate-700">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    Sejarah Temujanji Disahkan
+                </h3>
+                <div id="historyList" class="space-y-3">
+                    <p class="text-slate-500 italic">Tiada rekod temujanji disahkan untuk sekolah ini.</p>
                 </div>
             </div>
 
-            <div id="appointmentForm" class="hidden bg-white rounded-2xl shadow-2xl border border-blue-100 overflow-hidden mt-6 ring-4 ring-blue-50/50 scroll-mt-10">
+            <div id="appointmentForm" class="hidden bg-white rounded-2xl shadow-2xl border border-blue-100 overflow-hidden ring-4 ring-blue-50/50">
                 <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
-                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                        📅 Tetapkan Temujanji: <span id="targetRoleDisplay" class="text-blue-600 underline decoration-wavy"></span>
-                    </h3>
-                    <button onclick="closeForm()" class="text-slate-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-full transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
+                    <h3 class="font-bold text-slate-800">📅 Tetapkan Temujanji: <span id="targetRoleDisplay" class="text-blue-600"></span></h3>
+                    <button onclick="closeForm()" class="text-slate-400 hover:text-red-500 p-2 rounded-full">✕</button>
                 </div>
-                <div class="p-8 space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tarikh Cadangan</label>
-                            <input type="date" id="inpDate" class="w-full border border-slate-300 bg-white p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none shadow-sm transition">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Masa Kehadiran</label>
-                            <input type="time" id="inpTime" class="w-full border border-slate-300 bg-white p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none shadow-sm transition">
-                        </div>
+                <div class="p-6 space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-xs font-bold text-slate-500 mb-1">TARIKH</label><input type="date" id="inpDate" class="w-full border p-3 rounded-xl bg-white outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div><label class="block text-xs font-bold text-slate-500 mb-1">MASA</label><input type="time" id="inpTime" class="w-full border p-3 rounded-xl bg-white outline-none focus:ring-2 focus:ring-blue-500"></div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tujuan Bimbingan / Lawatan</label>
-                        <textarea id="inpPurpose" rows="3" class="w-full border border-slate-300 bg-white p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none shadow-sm transition" placeholder="Sila nyatakan tujuan secara ringkas..."></textarea>
-                    </div>
-                    <div class="pt-2 flex gap-3">
-                        <button onclick="closeForm()" class="px-6 py-3 rounded-xl font-bold text-slate-500 hover:bg-slate-100 border border-transparent hover:border-slate-200 transition">Batal</button>
-                        <button id="btnSend" onclick="submitForm()" class="flex-1 bg-slate-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-slate-800 shadow-lg shadow-slate-900/20 transition flex justify-center items-center gap-2">
-                            <span>HANTAR NOTIFIKASI</span>
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
-                        </button>
-                    </div>
+                    <div><label class="block text-xs font-bold text-slate-500 mb-1">TUJUAN</label><textarea id="inpPurpose" rows="2" class="w-full border p-3 rounded-xl bg-white outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nyatakan tujuan..."></textarea></div>
+                    <button id="btnSend" onclick="submitForm()" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 shadow-lg">HANTAR NOTIFIKASI</button>
                 </div>
             </div>
-
-        </div> </div>
+        </div>
+    </div>
 
     <script>
         // --- CONFIGURATION ---
@@ -201,16 +127,17 @@
 
                 // 2. Fetch Users
                 const { data: pics } = await supabaseClient.from('pengguna').select('*').eq('kod_sekolah', code);
+                
+                // 3. Fetch Appointment History (NEW)
+                const appointments = await fetchAppointments(code);
 
-                // 3. Update UI
+                // 4. Update UI
                 currentCode = code;
                 document.getElementById('schoolName').innerText = school.nama_sekolah;
                 document.getElementById('schoolCode').innerText = code;
 
-                // Reset Data Cards
                 resetCards();
 
-                // Fill Data Cards
                 if (pics) {
                     pics.forEach(p => {
                         if (p.peranan === 'GPICT') updateCard('gpict', p);
@@ -220,9 +147,9 @@
                     });
                 }
 
-                // Setup Buttons
                 setupButton('gpict', 'GPICT', pics);
                 setupButton('delima', 'ADMIN_DELIMA', pics);
+                displayAppointments(appointments); // Display History (NEW)
 
                 document.getElementById('resultSection').classList.remove('hidden');
 
@@ -233,10 +160,59 @@
             }
         }
 
-        // --- UI HELPERS ---
+        // --- APPOINTMENT HISTORY LOGIC (NEW) ---
+        async function fetchAppointments(code) {
+            // Tarik Temujanji yang Diterima (ACCEPTED) atau Tertunda (PENDING)
+            const { data, error } = await supabaseClient
+                .from('temujanji')
+                .select('*')
+                .eq('kod_sekolah', code)
+                .in('status', ['ACCEPTED', 'PENDING'])
+                .order('tarikh', { ascending: false });
+
+            if (error) {
+                showToast('Gagal tarik sejarah temujanji: ' + error.message, 'error');
+                return [];
+            }
+            return data;
+        }
+
+        function displayAppointments(appointments) {
+            const list = document.getElementById('historyList');
+            list.innerHTML = ''; // Clear previous list
+
+            if (!appointments || appointments.length === 0) {
+                list.innerHTML = '<p class="text-slate-500 italic">Tiada rekod temujanji disahkan untuk sekolah ini.</p>';
+                return;
+            }
+
+            appointments.forEach(apt => {
+                const statusColor = apt.status === 'ACCEPTED' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700';
+                const statusLabel = apt.status === 'ACCEPTED' ? 'DIESAHKAN' : 'MENUNGGU PIC';
+                
+                let detail = `Tarikh: ${apt.tarikh} | Masa: ${apt.masa} | Tujuan: ${apt.tujuan}`;
+
+                if (apt.status === 'PENDING' && apt.cadangan_tarikh_baru) {
+                     detail += ` (Ditolak - Cadangan PIC: ${apt.cadangan_tarikh_baru})`;
+                }
+
+                const item = document.createElement('div');
+                item.className = 'border border-slate-200 p-3 rounded-lg shadow-sm flex justify-between items-center';
+                item.innerHTML = `
+                    <div>
+                        <p class="font-medium text-slate-700">${apt.tujuan}</p>
+                        <p class="text-sm text-slate-500">${detail}</p>
+                    </div>
+                    <span class="text-xs font-bold px-2 py-1 rounded-full ${statusColor}">${statusLabel}</span>
+                `;
+                list.appendChild(item);
+            });
+        }
+        
+        // --- UTILITY FUNCTIONS ---
+        
         function updateCard(prefix, data) {
             document.getElementById(`${prefix}Name`).innerText = data.nama_penuh || 'Tiada Data';
-            // Update Phone if element exists
             const phoneEl = document.getElementById(`${prefix}Phone`).querySelector('span');
             if(phoneEl) phoneEl.innerText = data.no_telefon || '-';
         }
@@ -246,8 +222,10 @@
                 document.getElementById(`${p}Name`).innerText = 'Tiada Data';
                 const phoneEl = document.getElementById(`${p}Phone`).querySelector('span');
                 if(phoneEl) phoneEl.innerText = '-';
+                document.getElementById(`${p}ActionArea`).innerHTML = '';
             });
             ['pgbName', 'gpk1Name'].forEach(id => document.getElementById(id).innerText = '-');
+            document.getElementById('historyList').innerHTML = '<p class="text-slate-500 italic">Tiada rekod temujanji disahkan untuk sekolah ini.</p>';
         }
 
         function setupButton(prefix, role, pics) {
@@ -256,31 +234,12 @@
             const color = prefix === 'gpict' ? 'blue' : 'purple';
 
             if (user) {
-                container.innerHTML = `
-                    <button onclick="openForm('${role}')" class="w-full py-3 rounded-xl bg-${color}-600 text-white font-bold hover:bg-${color}-700 shadow-md shadow-${color}-200 transition flex justify-center items-center gap-2">
-                        <span>Tetapkan Temujanji</span>
-                    </button>
-                    <div class="mt-3 flex justify-center">
-                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-green-50 text-green-600 border border-green-100">
-                            <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> BERDAFTAR
-                        </span>
-                    </div>
-                `;
+                container.innerHTML = `<button onclick="openForm('${role}')" class="w-full py-2.5 rounded-lg bg-${color}-600 text-white font-bold hover:bg-${color}-700 shadow-md shadow-${color}-200 transition text-sm">TETAPKAN TEMUJANJI</button>`;
             } else {
-                container.innerHTML = `
-                    <button disabled class="w-full py-3 rounded-xl bg-slate-50 text-slate-400 font-bold border border-slate-200 cursor-not-allowed flex justify-center items-center gap-2">
-                        <span>Belum Mendaftar</span>
-                    </button>
-                    <div class="mt-3 flex justify-center">
-                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-red-50 text-red-400 border border-red-100">
-                            <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span> OFFLINE
-                        </span>
-                    </div>
-                `;
+                container.innerHTML = `<button disabled class="w-full py-2.5 rounded-lg bg-slate-100 text-slate-400 font-bold border border-slate-200 text-sm cursor-not-allowed">BELUM MENDAFTAR</button>`;
             }
         }
-
-        // --- APPOINTMENT LOGIC ---
+        
         function openForm(role) {
             currentRole = role;
             document.getElementById('targetRoleDisplay').innerText = role === 'GPICT' ? 'Guru Penyelaras ICT' : 'Admin DELIMa';
@@ -297,24 +256,18 @@
             const time = document.getElementById('inpTime').value;
             const purpose = document.getElementById('inpPurpose').value;
 
-            if (!date || !time || !purpose) { showToast('Sila lengkapkan semua maklumat.', 'error'); return; }
+            if (!date || !time || !purpose) { showToast('Sila lengkapkan semua maklumat!', 'error'); return; }
 
             const btn = document.getElementById('btnSend');
-            const oldHtml = btn.innerHTML;
-            btn.innerHTML = '<div class="loader ease-linear rounded-full border-2 border-t-2 border-white h-5 w-5"></div>';
+            const originalText = btn.innerText;
+            btn.innerText = 'MENGHANTAR...';
             btn.disabled = true;
 
             try {
                 const res = await fetch(`${FUNCTION_URL}?action=send_appointment`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        kod_sekolah: currentCode,
-                        target_role: currentRole,
-                        tarikh: date,
-                        masa: time,
-                        tujuan: purpose
-                    })
+                    body: JSON.stringify({ kod_sekolah: currentCode, target_role: currentRole, tarikh: date, masa: time, tujuan: purpose })
                 });
 
                 const json = await res.json();
@@ -323,35 +276,32 @@
 
                 showToast('✅ Notifikasi berjaya dihantar!', 'success');
                 closeForm();
-                // Clear Inputs
                 document.getElementById('inpDate').value = '';
                 document.getElementById('inpTime').value = '';
                 document.getElementById('inpPurpose').value = '';
 
+                // REFRESH HISTORY AFTER SENDING
+                searchSchool(); 
+
             } catch (err) {
                 showToast(err.message, 'error');
             } finally {
-                btn.innerHTML = oldHtml;
+                btn.innerText = originalText;
                 btn.disabled = false;
             }
         }
 
-        // --- TOAST NOTIFICATION ---
         function showToast(msg, type) {
             const container = document.getElementById('toast-container');
             const div = document.createElement('div');
             const bg = type === 'success' ? 'bg-green-600' : 'bg-red-600';
-            const icon = type === 'success' ? 
-                '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' : 
-                '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+            const icon = type === 'success' ? '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' : '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
 
-            div.className = `toast ${bg} text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 pointer-events-auto font-bold text-sm min-w-[300px]`;
+            div.className = `toast ${bg} text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 font-bold text-sm min-w-[300px]`;
             div.innerHTML = `${icon} <span>${msg}</span>`;
 
             container.appendChild(div);
-            
             requestAnimationFrame(() => div.classList.add('show'));
-            
             setTimeout(() => {
                 div.classList.remove('show');
                 setTimeout(() => div.remove(), 300);
